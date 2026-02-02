@@ -5,7 +5,9 @@
   <title>Be My Valentine 💖</title>
   <style>
     body {
+      margin: 0;
       height: 100vh;
+      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,11 +21,12 @@
       padding: 40px;
       border-radius: 20px;
       box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+      z-index: 2;
     }
 
     h1 {
-      margin-bottom: 30px;
       color: #ff4d6d;
+      margin-bottom: 30px;
     }
 
     button {
@@ -44,15 +47,43 @@
       background-color: #ccc;
       position: absolute;
     }
+
+    /* Floating hearts */
+    .heart {
+      position: absolute;
+      color: #ff4d6d;
+      font-size: 20px;
+      animation: float 6s linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) scale(0.5);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1.2);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <div class="box">
-    <h1>Nandini 💕<br>Will you be my Valentine? 💘</h1>
-    <button id="yes" onclick="yesClicked()">Yes 💖</button>
+  <div class="box" id="mainBox">
+    <h1>💖 Nandini 💖<br>Will you be my Valentine? 💘</h1>
+    <button id="yes" onclick="yesClicked()">Yes 💕</button>
     <button id="no">No 😜</button>
   </div>
+
+  <!-- Background music -->
+  <audio id="music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     const noBtn = document.getElementById("no");
@@ -65,21 +96,39 @@
     });
 
     function yesClicked() {
+      document.getElementById("music").play();
+
       document.body.innerHTML = `
         <div style="
           height:100vh;
           display:flex;
           justify-content:center;
           align-items:center;
-          background:#ffe6eb;
+          background:linear-gradient(135deg,#ffccd5,#ffe6eb);
           font-family:Segoe UI;
           text-align:center;">
           <h1 style="color:#ff4d6d;">
-            Yayyy! 💖😍<br>
-            Best Valentine ever!
+            Yayyy! 💖😍<br><br>
+            You just made me the happiest person 💕<br>
+            Let’s make this Valentine unforgettable ✨
           </h1>
         </div>
       `;
+
+      createHearts();
+    }
+
+    function createHearts() {
+      for (let i = 0; i < 30; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 6000);
+      }
     }
   </script>
 
